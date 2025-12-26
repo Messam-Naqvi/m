@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Charset definition -->
+    <meta charset="utf-8" />
+
+    <!-- Disable server fingerprinting by hiding software details (custom headers) -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <!-- Prevent clickjacking attacks -->
+    <meta http-equiv="X-Frame-Options" content="DENY" />
+
+    <!-- Prevent browser from sniffing MIME types -->
+    <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+
+    <!-- Content Security Policy (CSP) to control resources and prevent XSS attacks -->
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; img-src 'self' data:; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline';"
+    />
+
+    <!-- Limit resources to the current domain to reduce exposure to attacks -->
+    <meta name="referrer" content="no-referrer" />
+
+    <!-- Set permissions policy to restrict certain features -->
+    <meta
+      http-equiv="Permissions-Policy"
+      content="geolocation=(), camera=(), microphone=(), payment=()"
+    />
+
+    <!-- Favicon -->
+    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+
+    <!-- Mobile-friendly viewport -->
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Theme color -->
+    <meta name="theme-color" content="#000000" />
+
+    <!-- Description (keep it generic to avoid revealing software info) -->
+    <meta name="description" content="A modern web application" />
+
+    <!-- Apple icon for mobile devices -->
+    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+
+    <!-- Web App Manifest -->
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+
+    <!-- Title (generic) -->
+    <title>Messam Naqvi</title>
+  </head>
+  <body>
+    <!-- NoScript warning -->
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+
+    <!-- Root app container -->
+    <div id="root"></div>
+  </body>
+</html>

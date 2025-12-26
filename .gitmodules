@@ -1,0 +1,1 @@
+git config -f .git/config --remove-section submodule.portf

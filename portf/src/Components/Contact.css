@@ -1,0 +1,24 @@
+.about-container {
+    opacity: 0;
+    transition: opacity 0.8s ease-in-out;
+    color:aliceblue
+  }
+  
+  .about-container.show {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  
+  .about-container .MuiButton-root {
+    margin-top: 20px;
+  }
+  
+  .about-container .MuiAvatar-root {
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+  }
+  
+  .about-container .MuiAvatar-root.show {
+    opacity: 1;
+  }
+
