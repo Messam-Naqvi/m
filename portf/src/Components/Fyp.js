@@ -71,27 +71,28 @@ const Fyp = () => {
   const [progress, setProgress] = useState(0);
   const targetValue = 50;
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setInView(true);
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.1 }
-    );
+ useEffect(() => {
+  const element = gridRef.current; // ✅ capture ref ONCE
 
-    if (gridRef.current) {
-      observer.observe(gridRef.current);
-    }
+  if (!element) return;
 
-    return () => {
-      if (gridRef.current) {
-        observer.unobserve(gridRef.current);
+  const observer = new IntersectionObserver(
+    ([entry]) => {
+      if (entry.isIntersecting) {
+        setInView(true);
+        observer.disconnect();
       }
-    };
-  }, [gridRef]);
+    },
+    { threshold: 0.1 }
+  );
+
+  observer.observe(element);
+
+  return () => {
+    observer.unobserve(element); // ✅ safe cleanup
+  };
+}, []);
+
 
   useEffect(() => {
     if (inView) {
