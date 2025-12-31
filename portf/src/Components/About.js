@@ -49,6 +49,18 @@ const About = () => {
       <br />
       <br />
       <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+       <br />
+      <br /> <br />
+      <br /> <br />
+      <br />
       <div
         ref={aboutRef}
         className={`about-container ${isVisible ? "show" : ""}`}
@@ -147,6 +159,8 @@ const About = () => {
       <br />
       <br />
       <br />
+      <br /> <br />
+      <br /> <br />
       <br />
     </>
   );

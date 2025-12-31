@@ -144,8 +144,6 @@ const Projects = () => {
 
   return (
     <>
-      <br />
-      <br />
       <div style={{ textAlign: "center" }}>
         <Typography
           variant="h2"

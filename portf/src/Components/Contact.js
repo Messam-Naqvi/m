@@ -1,266 +1,193 @@
 import React, { useState, useRef, useEffect } from "react";
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
+import { Box, Typography, Button, Snackbar, Alert } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
-import Typography from "@mui/material/Typography";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import Snackbar from "@mui/material/Snackbar";
-import Alert from "@mui/material/Alert";
-import CircularProgress from "@mui/material/CircularProgress";
-import axios from "axios";
-import "./Contact.css";
+import { motion } from "framer-motion";
 
+/**
+ * Contact Component
+ * A responsive, animated contact section featuring a side-illustration 
+ * and a direct mail-to action.
+ */
 const Contact = () => {
-  const [isVisible, setIsVisible] = useState(false);
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [message, setMessage] = useState("");
-  const [errors, setErrors] = useState({});
-  const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "" });
-  const [loading, setLoading] = useState(false);
   const aboutRef = useRef(null);
-  const isMobile = useMediaQuery("(max-width:600px)");
+  const [isVisible, setIsVisible] = useState(false);
+  const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "info" });
+  const isMobile = useMediaQuery("(max-width:900px)");
 
+  // Intersection Observer to trigger entrance animations
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
-        setIsVisible(entry.isIntersecting);
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+        }
       },
-      { threshold: 0.6 }
+      { threshold: 0.2 }
     );
-
-    if (aboutRef.current) {
-      observer.observe(aboutRef.current);
-    }
-
-    return () => {
-     
-    };
+    if (aboutRef.current) observer.observe(aboutRef.current);
+    return () => observer.disconnect();
   }, []);
 
-  useEffect(() => {
-    if (snackbar.open) {
-      const timer = setTimeout(() => setSnackbar({ ...snackbar, open: false }), 4000);
-      return () => clearTimeout(timer);
-    }
-  }, [snackbar]);
-
-  const validateName = (name) => {
-    const nameRegex = /^[a-zA-Z\s]+$/;
-    if (!name) return "Name is required";
-    if (name.length < 3 || name.length > 40) return "Name is invalid";
-    if (!nameRegex.test(name)) return "Name must contain only letters";
-    return "";
-  };
-
-  const validateEmail = (email) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!email) return "Email is required";
-    if (!emailRegex.test(email)) return "Email is not valid";
-    return "";
-  };
-
-  const validateMessage = (message) => {
-    if (!message) return "Message is required";
-    if (message.length < 3) return "Message is invalid";
-    const wordCount = message.trim().split(/\s+/).length;
-    if (wordCount > 50) return "Message must not exceed 50 words";
-    return "";
-  };
-
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    const nameError = validateName(name);
-    const emailError = validateEmail(email);
-    const messageError = validateMessage(message);
-    if (nameError || emailError || messageError) {
-      setErrors({ name: nameError, email: emailError, message: messageError });
-    } else {
-      setErrors({});
-      setLoading(true); // Start loading
-      try {
-        const response = await axios.post(
-          "https://agytrh.onrender.com/api/contactus",
-          { name, email, message }
-        );
-        setSnackbar({
-          open: true,
-          message: response.data.message,
-          severity: "success",
-        });
-        setName(""); // Clear form fields
-        setEmail("");
-        setMessage("");
-      } catch (error) {
-        setSnackbar({
-          open: true,
-          message: "Failed to send message.Try Again!",
-          severity: "error",
-        });
-      } finally {
-        setLoading(false); // End loading
-      }
-    }
+  const handleContact = () => {
+    const email = "messamnaqvi22@gmail.com";
+    const subject = encodeURIComponent("Portfolio Inquiry / Project Collaboration");
+    const body = encodeURIComponent(
+      `Hello,\n\nI'm reaching out after seeing your portfolio. I'd love to discuss a potential project or collaboration.\n\nBest regards,\n[Your Name]`
+    );
+    
+    setSnackbar({ open: true, message: "Opening your email client...", severity: "info" });
+    
+    // Slight delay to allow user to see the feedback message before redirection
+    setTimeout(() => {
+      window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
+    }, 800);
   };
 
   return (
-    <div
+    <Box
       ref={aboutRef}
-      className={`about-container ${isVisible ? "show" : ""}`}
-      style={{
+      id="contact"
+      sx={{
         display: "flex",
-        justifyContent: "center",
+        flexDirection: isMobile ? "column" : "row",
+        justifyContent: "space-between",
         alignItems: "center",
         minHeight: "100vh",
-        backgroundColor: "#3335",
-        padding: "20px",
+        backgroundColor: "#3335", // Kept original background color
+        padding: isMobile ? "80px 24px" : "40px 10%",
+        gap: isMobile ? 4 : 8,
+        overflow: "hidden",
       }}
     >
-      {/* Left side with big picture */}
-      <div style={{ flex: 1, display: isMobile ? "none" : "block" }}>
-        <img
-          src={require("./bg2.png")}
-          alt="Big Picture"
-          style={{
-            width: "100%",
-            maxWidth: "400px",
-            height: "auto",
-            marginLeft: "10%",
-            marginRight: "10%",
-            borderRadius: "10px",
-          }}
-          className={isVisible ? "show" : ""}
-        />
-      </div>
-
-      {/* Right side with contact form */}
-      <div
-        style={{
-          flex: 1,
-          padding: "20px",
-          maxWidth: "400px",
-          margin: isMobile ? "0 auto" : "0 10%",
-          textAlign: isMobile ? "center" : "left",
+      {/* Left Side: Illustration - Moved further left via flex alignment */}
+      <motion.div
+        initial={{ opacity: 0, x: -100 }}
+        animate={isVisible ? { opacity: 1, x: 0 } : {}}
+        transition={{ duration: 0.8, ease: "easeOut" }}
+        style={{ 
+          flex: "1", 
+          display: "flex", 
+          justifyContent: isMobile ? "center" : "flex-start",
+          width: "100%" 
         }}
       >
-        <Typography
-          variant="h4"
-          gutterBottom
-          style={{
-            fontWeight: "bold",
-            fontSize: "2.7rem",
-            color: "white",
+        <Box
+          component="img"
+          // Using a placeholder that mimics your bg2.png since local assets cannot be resolved in this environment
+          src={require("./bg2.png")}
+          alt="Contact Illustration"
+          sx={{
+            width: "100%",
+            maxWidth: "480px",
+            height: "auto",
+            borderRadius: "20px",
+            
           }}
-        >
-          Contact <span style={{ color: "purple" }}>Me</span>
-        </Typography>
+          onError={(e) => { e.target.src = "https://via.placeholder.com/480x480?text=Contact+Illustration"; }}
+        />
+      </motion.div>
 
-        <form noValidate autoComplete="off" onSubmit={handleSubmit}>
-          {/* Name Input */}
-          <TextField
-            id="name"
-            label="Name"
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            error={!!errors.name}
-            helperText={errors.name}
-            InputLabelProps={{ style: { color: "white" } }}
-            InputProps={{
-              style: { backgroundColor: "black", color: "white" },
-              sx: {
-                "& .MuiOutlinedInput-notchedOutline": {
-                  borderColor: "purple",
-                },
-              },
-            }}
-          />
-
-          {/* Email Input */}
-          <TextField
-            id="email"
-            label="Email"
-            type="email"
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            error={!!errors.email}
-            helperText={errors.email}
-            InputLabelProps={{ style: { color: "white" } }}
-            InputProps={{
-              style: { backgroundColor: "black", color: "white" },
-              sx: {
-                "& .MuiOutlinedInput-notchedOutline": {
-                  borderColor: "purple",
-                },
-              },
-            }}
-          />
-
-          {/* Message Input */}
-          <TextField
-            id="message"
-            label="Message"
-            multiline
-            rows={4}
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            error={!!errors.message}
-            helperText={errors.message}
-            InputLabelProps={{ style: { color: "white" } }}
-            InputProps={{
-              style: { backgroundColor: "black", color: "white" },
-              sx: {
-                "& .MuiOutlinedInput-notchedOutline": {
-                  borderColor: "purple",
-                },
-              },
-            }}
-          />
-
-          {/* Send Message Button */}
-          <Button
-            type="submit"
-            variant="contained"
-            endIcon={loading ? <CircularProgress size={24} color="inherit" /> : <SendIcon />}
-            style={{
-              backgroundColor: "purple",
+      {/* Right Side: Content Area */}
+      <motion.div
+        initial={{ opacity: 0, x: 100 }}
+        animate={isVisible ? { opacity: 1, x: 30 } : {}} // Slight offset to the right as requested
+        transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
+        style={{ 
+          flex: "1", 
+          width: "100%",
+          display: "flex", 
+          flexDirection: "column",
+          alignItems: "center", // Centered middle headline
+          textAlign: "center"
+        }}
+      >
+        <Box sx={{ maxWidth: "500px" }}>
+          <Typography 
+            variant="h2" 
+            sx={{ 
+              fontWeight: 800, 
+              fontSize: isMobile ? "2.2rem" : "3.2rem", 
               color: "white",
-              marginTop: "10px",
+              mb: 3,
+              lineHeight: 1.2
             }}
-            disabled={loading}
           >
-            {loading ? "Sending..." : "Send Message"}
-          </Button>
-        </form>
-      </div>
+            Contact <span style={{ color: "purple" }}>Me</span>
+          </Typography>
 
-      {/* Snackbar for success and error messages */}
+          <Box 
+            sx={{ 
+              backgroundColor: "rgba(255, 255, 255, 0.05)", 
+              padding: 4, 
+              borderRadius: 6,
+              border: "1px solid rgba(255, 255, 255, 0.1)",
+              backdropFilter: "blur(12px)",
+              mb: 4,
+              boxShadow: "0 20px 40px rgba(0,0,0,0.2)"
+            }}
+          >
+            <Typography 
+              sx={{ 
+                color: "#d1d1d1", 
+                fontSize: "1.1rem", 
+                lineHeight: 1.8, 
+                mb: 4 
+              }}
+            >
+              Have a project in mind or just want to say hi? My inbox is always open. 
+              Click below to send a message directly to my email.
+            </Typography>
+
+            <Button
+              variant="contained"
+              endIcon={<SendIcon />}
+              onClick={handleContact}
+              sx={{
+                backgroundColor: "purple", // Kept original button color
+                color: "white",
+                px: 6,
+                py: 2,
+                borderRadius: "50px",
+                fontSize: "1rem",
+                fontWeight: "bold",
+                textTransform: "none",
+                boxShadow: "0 10px 30px rgba(128, 0, 128, 0.3)",
+                "&:hover": {
+                  backgroundColor: "darkviolet",
+                  transform: "translateY(-3px)",
+                  boxShadow: "0 15px 40px rgba(128, 0, 128, 0.5)",
+                },
+                transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+              }}
+            >
+              Contact Me
+            </Button>
+          </Box>
+
+          <Typography sx={{ color: "rgba(255,255,255,0.4)", fontSize: "0.85rem", letterSpacing: 1 }}>
+            AVAILABLE FOR FREELANCE & COLLABORATIONS
+          </Typography>
+        </Box>
+      </motion.div>
+
+      {/* Snackbar Feedback */}
       <Snackbar
         open={snackbar.open}
+        autoHideDuration={5000}
+        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
         onClose={() => setSnackbar({ ...snackbar, open: false })}
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
-        autoHideDuration={4000}
       >
         <Alert
           onClose={() => setSnackbar({ ...snackbar, open: false })}
           severity={snackbar.severity}
-          sx={{ width: "100%" }}
+          variant="filled"
+          sx={{ width: "100%", borderRadius: 2 }}
         >
           {snackbar.message}
         </Alert>
       </Snackbar>
-    </div>
+    </Box>
   );
 };
 
