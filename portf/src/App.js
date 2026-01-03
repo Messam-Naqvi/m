@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { BrowserRouter as Router, useLocation } from "react-router-dom";
+import {  useLocation } from "react-router-dom";
 import { Element, scroller } from "react-scroll";
 
 import Navbar from "./Components/Navbar";

@@ -1,16 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Box, Typography, Grid, Paper, Chip, Stack, IconButton, Tooltip } from "@mui/material";
+import { Box, Typography, Grid, Paper, Chip, Stack, IconButton } from "@mui/material";
 import { 
   School, 
   AutoAwesome, 
   Science, 
   WorkspacePremium,
   HistoryEdu,
-  LocationOn,
   CalendarMonth,
   Verified,
-  Insights,
-  FiberManualRecord,
   ArrowBackIosNew
 } from "@mui/icons-material";
 import { motion, useScroll, useSpring } from "framer-motion";

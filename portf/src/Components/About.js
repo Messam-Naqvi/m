@@ -14,7 +14,6 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
   Code, 
-  School, 
   AutoAwesome, 
   Terminal, 
   ArrowForward, 
@@ -27,7 +26,7 @@ const About = () => {
   const aboutRef = useRef(null);
   const navigate = useNavigate();
   const isMobile = useMediaQuery("(max-width:900px)");
-  const isSmallMobile = useMediaQuery("(max-width:600px)");
+  //const isSmallMobile = useMediaQuery("(max-width:600px)");
 
   const [isVisible, setIsVisible] = useState(false);
   const [showMore, setShowMore] = useState(false);

@@ -67,8 +67,12 @@ const Skill = () => {
   const [search, setSearch] = useState("");
   const [levelFilter, setLevelFilter] = useState("All");
 
-  const activeSkills =
-    skillData.find((c) => c.category === activeCategory)?.skills || [];
+  const activeSkills = useMemo(() => {
+  return (
+    skillData.find((c) => c.category === activeCategory)?.skills || []
+  );
+}, [activeCategory]);
+
 
   const filteredSkills = useMemo(() => {
     return activeSkills.filter((skill) => {
