@@ -97,7 +97,7 @@ const Home = () => {
         >
           {typedText} <br />
           <span style={{ whiteSpace: "nowrap", color: "#e0e0e0" }}>
-            I build things for the web.
+            I build things for web & Ai.
           </span>
         </Typography>
         <Typography

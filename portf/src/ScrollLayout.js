@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import { BrowserRouter as Router, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
+import { useEffect } from "react";
 import { Element, scroller } from "react-scroll";
 
 import Navbar from "./Components/Navbar";
@@ -10,10 +10,8 @@ import Projects from "./Components/Projects";
 import ResearchSection from "./Components/ResearchSection";
 import Contact from "./Components/Contact";
 import Footer from "./Components/Footor";
-import "./App.css";
 
-/* ================= ScrollToSection ================= */
-const ScrollToSection = () => {
+const ScrollLayout = () => {
   const location = useLocation();
 
   useEffect(() => {
@@ -35,15 +33,9 @@ const ScrollToSection = () => {
     }
   }, [location.pathname]);
 
-  return null;
-};
-
-/* ================= Main Scroll App ================= */
-function App() {
   return (
     <>
       <Navbar />
-      <ScrollToSection />
 
       <Element name="home">
         <Home />
@@ -72,6 +64,6 @@ function App() {
       <Footer />
     </>
   );
-}
+};
 
-export default App;
+export default ScrollLayout;
