@@ -53,8 +53,6 @@ const About = () => {
 
   return (
     <>
-    <br></br>
-   
     <Box
       ref={aboutRef}
       sx={{
