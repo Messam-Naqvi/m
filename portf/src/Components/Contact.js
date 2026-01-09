@@ -7,13 +7,16 @@ import { motion } from "framer-motion";
 /**
  * Contact Component
  * A responsive, animated contact section featuring a side-illustration 
- * and a direct mail-to action.
+ * and a direct mail-to action. Optimized for all device sizes.
  */
 const Contact = () => {
-  const aboutRef = useRef(null);
+  const contactRef = useRef(null);
   const [isVisible, setIsVisible] = useState(false);
   const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "info" });
-  const isMobile = useMediaQuery("(max-width:900px)");
+  
+  // Responsive Breakpoints
+  const isTablet = useMediaQuery("(max-width:900px)");
+  const isMobile = useMediaQuery("(max-width:600px)");
 
   // Intersection Observer to trigger entrance animations
   useEffect(() => {
@@ -23,9 +26,9 @@ const Contact = () => {
           setIsVisible(true);
         }
       },
-      { threshold: 0.2 }
+      { threshold: 0.1 }
     );
-    if (aboutRef.current) observer.observe(aboutRef.current);
+    if (contactRef.current) observer.observe(contactRef.current);
     return () => observer.disconnect();
   }, []);
 
@@ -38,79 +41,65 @@ const Contact = () => {
     
     setSnackbar({ open: true, message: "Opening your email client...", severity: "info" });
     
-    // Slight delay to allow user to see the feedback message before redirection
     setTimeout(() => {
       window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
     }, 800);
   };
 
+  // Helper to handle local image resolution safely
+  const getIllustrationSource = () => {
+    try {
+      return require("./bg2.png");
+    } catch (e) {
+      return "https://via.placeholder.com/480x480?text=Contact+Illustration";
+    }
+  };
+
   return (
     <Box
-      ref={aboutRef}
+      ref={contactRef}
       id="contact"
       sx={{
         display: "flex",
-        flexDirection: isMobile ? "column" : "row",
-        justifyContent: "space-between",
+        flexDirection: isTablet ? "column" : "row",
+        justifyContent: "center",
         alignItems: "center",
         minHeight: "100vh",
-        backgroundColor: "#3335", // Kept original background color
-        padding: isMobile ? "80px 24px" : "40px 10%",
-        gap: isMobile ? 4 : 8,
+        backgroundColor: "#3335",
+        padding: {
+          xs: "100px 20px",
+          sm: "120px 40px",
+          md: "40px 8%",
+          lg: "40px 10%"
+        },
+        gap: { xs: 6, md: 8 },
         overflow: "hidden",
       }}
     >
-      {/* Left Side: Illustration - Moved further left via flex alignment */}
+      {/* Content Area (Right side on PC, Top on Mobile) */}
       <motion.div
-        initial={{ opacity: 0, x: -100 }}
-        animate={isVisible ? { opacity: 1, x: 0 } : {}}
+        initial={{ opacity: 0, y: isTablet ? 30 : 0, x: isTablet ? 0 : 100 }}
+        animate={isVisible ? { opacity: 1, y: 0, x: 0 } : {}}
         transition={{ duration: 0.8, ease: "easeOut" }}
-        style={{ 
-          flex: "1", 
-          display: "flex", 
-          justifyContent: isMobile ? "center" : "flex-start",
-          width: "100%" 
-        }}
-      >
-        <Box
-          component="img"
-          // Using a placeholder that mimics your bg2.png since local assets cannot be resolved in this environment
-          src={require("./bg2.png")}
-          alt="Contact Illustration"
-          sx={{
-            width: "100%",
-            maxWidth: "480px",
-            height: "auto",
-            borderRadius: "20px",
-            
-          }}
-          onError={(e) => { e.target.src = "https://via.placeholder.com/480x480?text=Contact+Illustration"; }}
-        />
-      </motion.div>
-
-      {/* Right Side: Content Area */}
-      <motion.div
-        initial={{ opacity: 0, x: 100 }}
-        animate={isVisible ? { opacity: 1, x: 30 } : {}} // Slight offset to the right as requested
-        transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
         style={{ 
           flex: "1", 
           width: "100%",
           display: "flex", 
           flexDirection: "column",
-          alignItems: "center", // Centered middle headline
-          textAlign: "center"
+          alignItems: isTablet ? "center" : "flex-start",
+          textAlign: isTablet ? "center" : "left",
+          order: isTablet ? 1 : 2 // Text on top for mobile
         }}
       >
-        <Box sx={{ maxWidth: "500px" }}>
+        <Box sx={{ maxWidth: "550px" }}>
           <Typography 
             variant="h2" 
             sx={{ 
               fontWeight: 800, 
-              fontSize: isMobile ? "2.2rem" : "3.2rem", 
+              fontSize: { xs: "2.4rem", sm: "3rem", md: "3.5rem" }, 
               color: "white",
-              mb: 3,
-              lineHeight: 1.2
+              mb: 2,
+              lineHeight: 1.1
             }}
           >
             Contact <span style={{ color: "purple" }}>Me</span>
@@ -118,39 +107,40 @@ const Contact = () => {
 
           <Box 
             sx={{ 
-              backgroundColor: "rgba(255, 255, 255, 0.05)", 
-              padding: 4, 
-              borderRadius: 6,
-              border: "1px solid rgba(255, 255, 255, 0.1)",
+              backgroundColor: "rgba(255, 255, 255, 0.04)", 
+              padding: { xs: 3, sm: 4, md: 5 }, 
+              borderRadius: { xs: 6, md: 8 },
+              border: "1px solid rgba(255, 255, 255, 0.08)",
               backdropFilter: "blur(12px)",
               mb: 4,
-              boxShadow: "0 20px 40px rgba(0,0,0,0.2)"
+              boxShadow: "0 20px 50px rgba(0,0,0,0.3)"
             }}
           >
             <Typography 
               sx={{ 
-                color: "#d1d1d1", 
-                fontSize: "1.1rem", 
-                lineHeight: 1.8, 
+                color: "#e0e0e0", 
+                fontSize: { xs: "0.95rem", sm: "1.05rem", md: "1.1rem" }, 
+                lineHeight: 1.7, 
                 mb: 4 
               }}
             >
               Have a project in mind or just want to say hi? My inbox is always open. 
-              Click below to send a message directly to my email.
+              Click below to start a conversation directly via email.
             </Typography>
 
             <Button
               variant="contained"
               endIcon={<SendIcon />}
               onClick={handleContact}
+              fullWidth={isMobile}
               sx={{
-                backgroundColor: "purple", // Kept original button color
+                backgroundColor: "purple",
                 color: "white",
-                px: 6,
+                px: { xs: 4, sm: 6 },
                 py: 2,
                 borderRadius: "50px",
                 fontSize: "1rem",
-                fontWeight: "bold",
+                fontWeight: 700,
                 textTransform: "none",
                 boxShadow: "0 10px 30px rgba(128, 0, 128, 0.3)",
                 "&:hover": {
@@ -161,28 +151,56 @@ const Contact = () => {
                 transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
               }}
             >
-              Contact Me
+              Send Message
             </Button>
           </Box>
 
-          <Typography sx={{ color: "rgba(255,255,255,0.4)", fontSize: "0.85rem", letterSpacing: 1 }}>
+          <Typography sx={{ color: "rgba(255,255,255,0.4)", fontSize: "0.75rem", letterSpacing: 2, fontWeight: 600 }}>
             AVAILABLE FOR FREELANCE & COLLABORATIONS
           </Typography>
         </Box>
+      </motion.div>
+
+      {/* Illustration Area (Left side on PC, Bottom on Mobile) */}
+      <motion.div
+        initial={{ opacity: 0, y: isTablet ? 30 : 0, x: isTablet ? 0 : -100 }}
+        animate={isVisible ? { opacity: 1, y: 0, x: 0 } : {}}
+        transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
+        style={{ 
+          flex: "1", 
+          display: "flex", 
+          justifyContent: "center",
+          width: "100%",
+          order: isTablet ? 2 : 1 // Image at bottom for mobile
+        }}
+      >
+        <Box
+          component="img"
+          src={getIllustrationSource()}
+          alt="Contact Illustration"
+          sx={{
+            width: "100%",
+            maxWidth: { xs: "320px", sm: "420px", md: "520px" },
+            height: "auto",
+            filter: "drop-shadow(0 20px 50px rgba(0,0,0,0.5))",
+            borderRadius: "24px"
+          }}
+          onError={(e) => { e.target.src = "https://via.placeholder.com/480x480?text=Contact+Illustration"; }}
+        />
       </motion.div>
 
       {/* Snackbar Feedback */}
       <Snackbar
         open={snackbar.open}
         autoHideDuration={5000}
-        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
         onClose={() => setSnackbar({ ...snackbar, open: false })}
       >
         <Alert
           onClose={() => setSnackbar({ ...snackbar, open: false })}
           severity={snackbar.severity}
           variant="filled"
-          sx={{ width: "100%", borderRadius: 2 }}
+          sx={{ width: "100%", borderRadius: 3 }}
         >
           {snackbar.message}
         </Alert>
