@@ -217,11 +217,6 @@ const Home = () => {
           </div>
         </Box>
       </Modal>
-      <br></br>
-      <br></br>
-      <br></br>
-      <br></br>
-      <br></br>
     </>
   );
 };

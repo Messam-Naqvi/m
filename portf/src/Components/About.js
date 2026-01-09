@@ -54,17 +54,7 @@ const About = () => {
   return (
     <>
     <br></br>
-    <br></br>
-    <br></br>
-    <br></br>
-    <br></br>
-    <br></br>
-    <br></br>
-    <br></br>
-    <br></br>
-    <br></br>
-    <br></br>
-    <br></br>
+   
     <Box
       ref={aboutRef}
       sx={{
