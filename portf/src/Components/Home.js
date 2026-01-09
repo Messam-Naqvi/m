@@ -6,8 +6,6 @@ import CloseIcon from "@mui/icons-material/Close";
 import CodeIcon from "@mui/icons-material/Code";
 import TerminalIcon from "@mui/icons-material/Terminal";
 import HubIcon from "@mui/icons-material/Hub";
-import { useTheme } from "@mui/material/styles";
-import useMediaQuery from "@mui/material/useMediaQuery";
 import { motion } from "framer-motion";
 
 // Configuration Logic
@@ -60,8 +58,7 @@ const serviceCardStyle = {
 };
 
 const Home = () => {
-  const theme = useTheme();
-  const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
+
   const [typedText, setTypedText] = useState("");
   const [openModal, setOpenModal] = useState(false);
 
