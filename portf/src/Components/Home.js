@@ -31,11 +31,13 @@ const modalStyle = {
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: "95%",
+  width: "90%",
   maxWidth: 700,
+  maxHeight: "90vh",
+  overflowY: "auto",
   bgcolor: "rgba(8, 8, 8, 0.98)",
   backdropFilter: "blur(30px)",
-  borderRadius: 6,
+  borderRadius: { xs: 4, md: 6 },
   border: "1px solid rgba(128, 0, 128, 0.2)",
   boxShadow: "0 0 80px rgba(0, 0, 0, 0.9)",
   p: { xs: 3, md: 6 },
@@ -44,21 +46,19 @@ const modalStyle = {
 
 const serviceCardStyle = {
   p: 3,
+  height: "100%",
   borderRadius: "20px",
   background: "rgba(255, 255, 255, 0.02)",
   border: "1px solid rgba(255, 255, 255, 0.05)",
   transition: "all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)",
-  cursor: "pointer",
   "&:hover": {
     background: "rgba(128, 0, 128, 0.08)",
     borderColor: "purple",
-    transform: "translateY(-5px) scale(1.02)",
-    boxShadow: "0 10px 30px rgba(128, 0, 128, 0.2)"
+    transform: "translateY(-5px)",
   }
 };
 
 const Home = () => {
-
   const [typedText, setTypedText] = useState("");
   const [openModal, setOpenModal] = useState(false);
 
@@ -89,9 +89,8 @@ const Home = () => {
         alignItems: "center",
         color: "white",
         position: "relative",
-        overflow: "hidden",
+        overflowX: "hidden",
         backgroundColor: "#020202",
-        // Multi-layered Nebula Background
         background: `
           radial-gradient(circle at 10% 20%, rgba(128, 0, 128, 0.12) 0%, transparent 40%),
           radial-gradient(circle at 90% 80%, rgba(75, 0, 130, 0.08) 0%, transparent 40%),
@@ -99,58 +98,68 @@ const Home = () => {
         `,
       }}
     >
-      {/* Dynamic Animated Blobs */}
+      {/* Animated Background Element */}
       <motion.div
         animate={{
-          x: [0, 50, 0],
-          y: [0, 30, 0],
-          scale: [1, 1.1, 1],
+          x: [0, 30, 0],
+          y: [0, 20, 0],
+          opacity: [0.05, 0.1, 0.05],
         }}
-        transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
+        transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
         style={{
           position: "absolute",
-          top: "20%",
-          left: "15%",
-          width: "40vw",
-          height: "40vw",
-          background: "radial-gradient(circle, rgba(128, 0, 128, 0.05) 0%, transparent 70%)",
-          filter: "blur(80px)",
+          top: "10%",
+          left: "5%",
+          width: "60vw",
+          height: "60vw",
+          background: "radial-gradient(circle, purple 0%, transparent 70%)",
+          filter: "blur(120px)",
           pointerEvents: "none",
+          zIndex: 0,
         }}
       />
 
-      <Box sx={{ px: { xs: 3, md: 12 }, zIndex: 1, position: "relative", width: "100%" }}>
-        <Grid container spacing={4} alignItems="center">
-          <Grid item xs={12} lg={8}>
+      <Box 
+        sx={{ 
+          px: { xs: 3, sm: 6, md: 12 }, 
+          py: { xs: 10, md: 0 },
+          zIndex: 1, 
+          position: "relative", 
+          width: "100%" 
+        }}
+      >
+        <Grid container spacing={4}>
+          <Grid item xs={12} lg={9}>
             <motion.div
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8 }}
             >
-              {/* Recruiter-Ready Badge */}
-              <Stack direction="row" spacing={1} sx={{ mb: 3 }}>
-                <Chip 
-                  label="OPEN FOR COLLABORATION" 
-                  size="small" 
-                  sx={{ 
-                    bgcolor: "rgba(128, 0, 128, 0.1)", 
-                    color: "purple", 
-                    fontWeight: 800, 
-                    fontSize: "0.65rem",
-                    border: "1px solid rgba(128, 0, 128, 0.3)",
-                    letterSpacing: 1
-                  }} 
-                />
-              </Stack>
+              <Chip 
+                label="OPEN FOR COLLABORATION" 
+                size="small" 
+                sx={{ 
+                  mb: 3,
+                  bgcolor: "rgba(128, 0, 128, 0.1)", 
+                  color: "purple", 
+                  fontWeight: 800, 
+                  fontSize: "0.65rem",
+                  border: "1px solid rgba(128, 0, 128, 0.3)",
+                  letterSpacing: 1
+                }} 
+              />
 
               <Typography
                 variant="h1"
                 sx={{
                   fontWeight: 950,
-                  fontSize: { xs: "3.2rem", md: "5.5rem" },
-                  lineHeight: 0.9,
-                  mb: 1.5,
-                  letterSpacing: -3,
+                  fontSize: { 
+                    xs: "clamp(2.5rem, 10vw, 3.5rem)", 
+                    md: "clamp(4rem, 8vw, 6rem)" 
+                  },
+                  lineHeight: { xs: 1.1, md: 0.9 },
+                  mb: 2,
+                  letterSpacing: { xs: -1, md: -4 },
                   textShadow: "0 0 40px rgba(0,0,0,0.5)"
                 }}
               >
@@ -164,61 +173,78 @@ const Home = () => {
                 </motion.span>
                 <br />
                 <Box
-  component="span"
-  sx={{
-   fontWeight: "bold",
-              color: "#d1c4e9", whiteSpace: "nowrap",
-              fontSize: "calc(22px + 1.5vw)",
-              lineHeight: 1.2,
-  }}
->
-  {CONFIG.tagline}
-</Box>
-
+                  component="span"
+                  sx={{
+                    fontWeight: 700,
+                    color: "#d1c4e9",
+                    fontSize: { 
+                      xs: "clamp(1.2rem, 5vw, 1.8rem)", 
+                      md: "clamp(2rem, 4vw, 3.5rem)" 
+                    },
+                    display: "block",
+                    mt: { xs: 1, md: 2 },
+                    lineHeight: 1.2,
+                  }}
+                >
+                  {CONFIG.tagline}
+                </Box>
               </Typography>
 
               <Typography
                 sx={{
                   maxWidth: "650px",
-                  color: "#777",
-                  fontSize: { xs: "0.95rem", md: "1.15rem" },
-                  lineHeight: 1.7,
+                  color: "#888",
+                  fontSize: { xs: "0.9rem", md: "1.1rem" },
+                  lineHeight: 1.6,
                   mb: 4,
-                  fontWeight: 400,
                   borderLeft: "2px solid purple",
-                  pl: 3
+                  pl: { xs: 2, md: 3 },
                 }}
               >
                 {CONFIG.bio}
               </Typography>
 
-              {/* Quick Meta for Recruiters */}
-              <Stack direction="row" spacing={4} sx={{ mb: 6 }}>
+              {/* Stats - Horizontal on desktop, wrapping on mobile */}
+              <Stack 
+                direction="row" 
+                spacing={{ xs: 3, md: 6 }} 
+                sx={{ mb: { xs: 5, md: 6 }, flexWrap: "wrap", gap: { xs: 2, md: 0 } }}
+              >
                 {CONFIG.stats.map((stat, i) => (
                   <Box key={i}>
-                    <Typography sx={{ color: "white", fontWeight: 900, fontSize: "1.2rem" }}>{stat.value}</Typography>
-                    <Typography sx={{ color: "#444", fontWeight: 700, fontSize: "0.7rem", textTransform: "uppercase", letterSpacing: 1 }}>{stat.label}</Typography>
+                    <Typography sx={{ color: "white", fontWeight: 900, fontSize: { xs: "1.1rem", md: "1.3rem" } }}>
+                      {stat.value}
+                    </Typography>
+                    <Typography sx={{ color: "#555", fontWeight: 700, fontSize: "0.65rem", textTransform: "uppercase", letterSpacing: 1 }}>
+                      {stat.label}
+                    </Typography>
                   </Box>
                 ))}
               </Stack>
 
-              <Stack direction={{ xs: "column", sm: "row" }} spacing={2.5}>
+              {/* Action Buttons - Stacked on mobile */}
+              <Stack 
+                direction={{ xs: "column", sm: "row" }} 
+                spacing={2}
+                sx={{ width: { xs: "100%", sm: "auto" } }}
+              >
                 <Button
                   variant="contained"
                   href={mailToLink}
                   startIcon={<MailIcon />}
+                  fullWidth={false}
                   sx={{
                     bgcolor: "purple",
-                    px: 5,
+                    px: { xs: 3, md: 5 },
                     py: 1.8,
-                    borderRadius: "16px",
+                    borderRadius: "14px",
                     fontWeight: 800,
                     textTransform: "none",
-                    boxShadow: "0 20px 40px rgba(128,0,128,0.2)",
-                    "&:hover": { bgcolor: "#5e35b1", transform: "translateY(-4px)" },
+                    boxShadow: "0 10px 30px rgba(128,0,128,0.2)",
+                    "&:hover": { bgcolor: "#5e35b1", transform: "translateY(-2px)" },
                   }}
                 >
-                  Hire Me / Get in Touch
+                  Get in Touch
                 </Button>
 
                 <Button
@@ -228,16 +254,16 @@ const Home = () => {
                   sx={{
                     borderColor: "rgba(255,255,255,0.1)",
                     color: "white",
-                    px: 5,
+                    px: { xs: 3, md: 5 },
                     py: 1.8,
-                    borderRadius: "16px",
+                    borderRadius: "14px",
                     fontWeight: 800,
                     textTransform: "none",
                     backdropFilter: "blur(10px)",
-                    "&:hover": { borderColor: "purple", bgcolor: "rgba(128,0,128,0.05)", transform: "translateY(-4px)" },
+                    "&:hover": { borderColor: "purple", bgcolor: "rgba(128,0,128,0.05)", transform: "translateY(-2px)" },
                   }}
                 >
-                  Technical Services
+                  Explore Services
                 </Button>
               </Stack>
             </motion.div>
@@ -245,37 +271,37 @@ const Home = () => {
         </Grid>
       </Box>
 
-      {/* Services Insight Modal */}
+      {/* Services Modal */}
       <Modal open={openModal} onClose={handleClose} closeAfterTransition>
         <Fade in={openModal}>
           <Box sx={modalStyle}>
-            <IconButton
-              onClick={handleClose}
-              sx={{ position: "absolute", top: 20, right: 20, color: "#555", "&:hover": { color: "white" } }}
-            >
-              <CloseIcon />
-            </IconButton>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 3 }}>
+              <Box>
+                <Typography variant="h4" sx={{ color: "white", fontWeight: 900, letterSpacing: -1, fontSize: { xs: '1.8rem', md: '2.5rem' } }}>
+                  My <span style={{ color: "purple" }}>Expertise</span>
+                </Typography>
+                <Typography variant="body2" sx={{ color: "#666", mt: 0.5 }}>
+                  Scalable engineering for the modern web.
+                </Typography>
+              </Box>
+              <IconButton onClick={handleClose} sx={{ color: "#444", "&:hover": { color: "white" } }}>
+                <CloseIcon />
+              </IconButton>
+            </Box>
 
-            <Typography variant="h3" sx={{ color: "white", fontWeight: 900, mb: 1, letterSpacing: -1 }}>
-              Expertise <span style={{ color: "purple" }}>Stack</span>
-            </Typography>
-            <Typography variant="body1" sx={{ color: "#666", mb: 5, maxWidth: "500px" }}>
-              High-performance solutions designed for scalability, security, and intelligence.
-            </Typography>
-
-            <Grid container spacing={2.5}>
+            <Grid container spacing={2}>
               {CONFIG.services.map((service, idx) => (
-                <Grid item xs={12} md={6} key={idx}>
+                <Grid item xs={12} sm={6} md={6} key={idx}>
                   <Box sx={serviceCardStyle}>
-                    <Stack direction="row" spacing={2} alignItems="center" sx={{ mb: 1.5 }}>
-                      <Box sx={{ p: 1, borderRadius: "10px", bgcolor: "rgba(128,0,128,0.2)", color: "purple", display: "flex" }}>
+                    <Stack direction="row" spacing={1.5} alignItems="center" sx={{ mb: 1.5 }}>
+                      <Box sx={{ p: 0.8, borderRadius: "8px", bgcolor: "rgba(128,0,128,0.15)", color: "purple", display: "flex" }}>
                         {service.icon}
                       </Box>
-                      <Typography variant="h6" sx={{ fontWeight: 800, color: "white" }}>
+                      <Typography variant="subtitle1" sx={{ fontWeight: 800, color: "white" }}>
                         {service.title}
                       </Typography>
                     </Stack>
-                    <Typography variant="body2" sx={{ color: "#888", lineHeight: 1.6 }}>
+                    <Typography variant="body2" sx={{ color: "#888", lineHeight: 1.5, fontSize: '0.85rem' }}>
                       {service.desc}
                     </Typography>
                   </Box>
@@ -283,9 +309,25 @@ const Home = () => {
               ))}
             </Grid>
 
-            <Box sx={{ mt: 5, p: 3, bgcolor: "rgba(128,0,128,0.03)", borderRadius: "20px", border: "1px dashed rgba(128,0,128,0.2)", textAlign: 'center' }}>
-              <Typography sx={{ color: "#aaa", fontSize: "0.85rem" }}>
-                Looking for something custom? <span style={{ color: 'purple', fontWeight: 700, cursor: 'pointer' }} onClick={() => window.location.href = mailToLink}>Let's discuss your project.</span>
+            <Box 
+              sx={{ 
+                mt: 4, 
+                p: 2, 
+                bgcolor: "rgba(128,0,128,0.03)", 
+                borderRadius: "16px", 
+                border: "1px dashed rgba(128,0,128,0.2)", 
+                textAlign: 'center' 
+              }}
+            >
+              <Typography sx={{ color: "#666", fontSize: "0.75rem", fontWeight: 500 }}>
+                Have a specific requirement?{" "}
+                <Box 
+                  component="span" 
+                  onClick={() => window.location.href = mailToLink}
+                  sx={{ color: 'purple', fontWeight: 700, cursor: 'pointer', "&:hover": { textDecoration: 'underline' } }}
+                >
+                  Let's talk.
+                </Box>
               </Typography>
             </Box>
           </Box>
