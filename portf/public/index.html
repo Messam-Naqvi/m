@@ -13,10 +13,12 @@
     <!-- Prevent browser from sniffing MIME types -->
     <meta http-equiv="X-Content-Type-Options" content="nosniff" />
 
-    <!-- Content Security Policy (CSP) to control resources and prevent XSS attacks -->
+    <!-- Content Security Policy (CSP) to control resources and prevent XSS attacks.
+         connect-src/script-src include Firebase (Auth, Firestore) and Google
+         Analytics (GA4) endpoints the client SDK talks to directly. -->
     <meta
       http-equiv="Content-Security-Policy"
-      content="default-src 'self'; img-src 'self' data:; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline';"
+      content="default-src 'self'; img-src 'self' data: https:; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline'; connect-src 'self' https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://firestore.googleapis.com https://www.googleapis.com https://www.google-analytics.com https://region1.google-analytics.com https://www.googletagmanager.com https://analytics.google.com;"
     />
 
     <!-- Limit resources to the current domain to reduce exposure to attacks -->
