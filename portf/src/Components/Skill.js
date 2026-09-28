@@ -17,23 +17,42 @@ import FilterAltIcon from "@mui/icons-material/FilterAlt";
 
 const skillData = [
   {
-    category: "Frontend",
+    category: "AI & Machine Learning",
     skills: [
-      { name: "HTML5", level: "Expert", projects: 12, confidence: 95 },
-      { name: "CSS / Tailwind", level: "Expert", projects: 10, confidence: 92 },
-      { name: "JavaScript", level: "Advanced", projects: 11, confidence: 88 },
-      { name: "React.js", level: "Advanced", projects: 9, confidence: 85 },
-      { name: "Material UI", level: "Advanced", projects: 7, confidence: 82 },
+      { name: "Machine Learning", level: "Advanced", projects: 8, confidence: 86 },
+      { name: "Deep Learning", level: "Advanced", projects: 6, confidence: 82 },
+      { name: "Generative AI", level: "Intermediate", projects: 4, confidence: 76 },
+      { name: "LLMs", level: "Intermediate", projects: 4, confidence: 78 },
+      { name: "RAG", level: "Intermediate", projects: 3, confidence: 74 },
+      { name: "Agentic AI", level: "Intermediate", projects: 2, confidence: 68 },
+      { name: "NLP", level: "Advanced", projects: 5, confidence: 84 },
     ],
   },
   {
-    category: "Backend",
+    category: "MLOps / LLMOps",
+    skills: [
+      { name: "Model Evaluation", level: "Intermediate", projects: 4, confidence: 75 },
+      { name: "Experiment Tracking", level: "Intermediate", projects: 3, confidence: 70 },
+      { name: "Deployment Pipelines", level: "Intermediate", projects: 3, confidence: 70 },
+    ],
+  },
+  {
+    category: "Backend & Software Engineering",
     skills: [
       { name: "Node.js", level: "Advanced", projects: 8, confidence: 85 },
       { name: "Express.js", level: "Advanced", projects: 7, confidence: 83 },
       { name: "REST APIs", level: "Expert", projects: 9, confidence: 92 },
-      { name: "MongoDB", level: "Advanced", projects: 8, confidence: 86 },
-      { name: "PostgreSQL", level: "Expert", projects: 10, confidence: 94 },
+      { name: "Firebase", level: "Intermediate", projects: 2, confidence: 74 },
+      { name: "React.js", level: "Advanced", projects: 9, confidence: 85 },
+    ],
+  },
+  {
+    category: "Languages",
+    skills: [
+      { name: "Python", level: "Advanced", projects: 9, confidence: 88 },
+      { name: "JavaScript", level: "Advanced", projects: 11, confidence: 88 },
+      { name: "C#", level: "Advanced", projects: 3, confidence: 80 },
+      { name: "C++", level: "Advanced", projects: 6, confidence: 82 },
     ],
   },
   {
@@ -43,14 +62,6 @@ const skillData = [
       { name: "Data Structures", level: "Advanced", projects: 8, confidence: 87 },
       { name: "Algorithms", level: "Advanced", projects: 7, confidence: 84 },
       { name: "Git / GitHub", level: "Advanced", projects: 9, confidence: 88 },
-    ],
-  },
-  {
-    category: "Data & AI",
-    skills: [
-      { name: "Python", level: "Advanced", projects: 8, confidence: 86 },
-      { name: "Pandas / NumPy", level: "Intermediate", projects: 6, confidence: 75 },
-      { name: "ML Fundamentals", level: "Intermediate", projects: 5, confidence: 72 },
     ],
   },
 ];

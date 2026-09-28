@@ -1,0 +1,55 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Replace with the single owner account's email (must match
+    // REACT_APP_ADMIN_EMAIL and the one Firebase Auth user you create).
+    function isOwner() {
+      return request.auth != null
+        && request.auth.token.email == "messamnaqvi22@gmail.com";
+    }
+
+    // ---------- Categories ----------
+    match /categories/{categoryId} {
+      allow read: if true;
+      allow write: if isOwner();
+    }
+
+    // ---------- Resources ----------
+    match /resources/{resourceId} {
+      allow read: if resource.data.published == true || isOwner();
+      allow create, update, delete: if isOwner();
+    }
+
+    // ---------- Contact messages ----------
+    match /messages/{messageId} {
+      allow create: if request.resource.data.keys().hasOnly(['name', 'email', 'message', 'read', 'createdAt'])
+        && request.resource.data.name is string
+        && request.resource.data.name.size() >= 3
+        && request.resource.data.name.size() <= 40
+        && request.resource.data.email is string
+        && request.resource.data.email.matches('^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$')
+        && request.resource.data.message is string
+        && request.resource.data.message.size() >= 3
+        && request.resource.data.read == false;
+      allow read, update, delete: if isOwner();
+    }
+
+    // ---------- Anonymous analytics (no Cloud Functions -> stays on the free plan) ----------
+    match /analytics/{day} {
+      allow read: if isOwner();
+      allow create: if request.resource.data.keys().hasOnly(['totalVisits'])
+        && request.resource.data.totalVisits == 1;
+      allow update: if request.resource.data.diff(resource.data).affectedKeys().hasOnly(['totalVisits'])
+        && request.resource.data.totalVisits == resource.data.totalVisits + 1;
+      allow delete: if isOwner();
+
+      match /visitors/{visitorId} {
+        allow read: if isOwner();
+        allow create: if request.resource.data.keys().hasOnly(['firstSeen']);
+        allow update, delete: if isOwner();
+      }
+    }
+  }
+}

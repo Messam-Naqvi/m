@@ -1,6 +1,7 @@
 node_modules
 dist
 build
+firebase-debug.log
 .env
 .env.local
 .env.production

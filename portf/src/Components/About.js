@@ -1,7 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import {
   Typography,
-  Avatar,
   Grid,
   Button,
   Box,
@@ -12,15 +11,15 @@ import {
 import { useNavigate } from "react-router-dom";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { motion, AnimatePresence } from "framer-motion";
-import { 
-  Code, 
-  AutoAwesome, 
-  Terminal, 
-  ArrowForward, 
-  ExpandMore, 
-  ExpandLess 
+import {
+  Code,
+  AutoAwesome,
+  Terminal,
+  ArrowForward,
+  ExpandMore,
+  ExpandLess,
+  School,
 } from "@mui/icons-material";
-import me from "./Pictures/me.jpg";
 
 const About = () => {
   const aboutRef = useRef(null);
@@ -105,8 +104,8 @@ const About = () => {
                 mx: isTablet ? "auto" : 0
               }}
             >
-              I am a <span style={{ color: "purple", fontWeight: 600 }}>Computer Science graduate</span> and AI-focused software engineer,
-              dedicated to bridging the gap between complex data and intuitive human experiences.
+              I am an <span style={{ color: "purple", fontWeight: 600 }}>AI-focused software engineer</span> currently pursuing an
+              MS in Artificial Intelligence at LUMS, dedicated to bridging the gap between complex data and intuitive human experiences.
             </Typography>
 
             <AnimatePresence>
@@ -126,9 +125,9 @@ const About = () => {
                       textAlign: isTablet ? "center" : "left",
                     }}
                   >
-                    My journey spans from foundational software engineering to the frontiers of 
-                    <span style={{ color: "white" }}> Artificial Intelligence</span>. I specialize in the MERN stack 
-                    while actively training Deep Learning models to solve real-world challenges.
+                    My journey spans from foundational software engineering to the frontiers of
+                    <span style={{ color: "white" }}> Artificial Intelligence</span> — Deep Learning, Generative AI,
+                    LLMs, and Agentic systems — grounded in a full-stack engineering background.
                   </Typography>
                   <Typography
                     sx={{
@@ -256,17 +255,22 @@ const About = () => {
                   },
                 }}
               />
-              <Avatar
-                src={me}
-                alt="Messam Naqvi"
+              <Box
                 sx={{
                   width: { xs: 180, sm: 220, md: 240 },
                   height: { xs: 180, sm: 220, md: 240 },
                   mx: "auto",
-                  border: "4px solid white",
-                  boxShadow: "0 0 30px rgba(0,0,0,0.4)"
+                  borderRadius: "50%",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  background: "radial-gradient(circle at 30% 30%, rgba(138,43,226,0.35), rgba(0,0,0,0.9))",
+                  border: "4px solid rgba(255,255,255,0.15)",
+                  boxShadow: "0 0 40px rgba(138,43,226,0.35)",
                 }}
-              />
+              >
+                <School sx={{ fontSize: { xs: 72, md: 96 }, color: "rgba(255,255,255,0.85)" }} />
+              </Box>
             </Box>
             
             {/* Quick Stats Grid */}

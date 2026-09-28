@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { Link } from "react-scroll";
+import { Link as ScrollLink } from "react-scroll";
+import { Link as RouterLink, useLocation } from "react-router-dom";
 import {
   AppBar,
   Toolbar,
@@ -18,261 +19,113 @@ import { useTheme } from "@mui/material/styles";
 import "./Navbar.css";
 import logo from "../logo.png";
 
+const SCROLL_LINKS = [
+  { label: "Home", to: "home" },
+  { label: "About", to: "about" },
+  { label: "Skills", to: "skill" },
+  { label: "Projects", to: "projects" },
+  { label: "Research", to: "fyp" },
+  { label: "Contact", to: "contact" },
+];
+
+const navButtonSx = {
+  marginLeft: "20px",
+  color: "#fff",
+  "&:hover": { backgroundColor: "#800080" },
+};
+
 const Navbar = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const location = useLocation();
   const [showDrawer, setShowDrawer] = useState(false);
-  const [isHomeHovering, setIsHomeHovering] = useState(false);
-  const [isAboutHovering, setIsAboutHovering] = useState(false);
-  const [isSkillsHovering, setIsSkillsHovering] = useState(false);
-  const [isProjectsHovering, setIsProjectsHovering] = useState(false);
-  const [isContactHovering, setIsContactHovering] = useState(false);
 
-  const toggleDrawer = () => {
-    setShowDrawer(!showDrawer);
-  };
+  const toggleDrawer = () => setShowDrawer((v) => !v);
+  const handleCloseDrawer = () => setShowDrawer(false);
 
-  const handleCloseDrawer = () => {
-    setShowDrawer(false);
-  };
+  const isResourcesActive = location.pathname.startsWith("/resources");
+  const onHomepage = !isResourcesActive;
 
   return (
-    <AppBar
-      position="sticky"
-      sx={{ backgroundColor: "transparent", boxShadow: "none" }}
-    >
+    <AppBar position="sticky" sx={{ backgroundColor: "transparent", boxShadow: "none" }}>
       <Toolbar>
         <Typography
           variant="h6"
           component="div"
-          sx={{
-            flexGrow: 1,
-            color: "#FFFFFF",
-            marginLeft: "30px",
-            fontSize: "23px",
-          }}
+          sx={{ flexGrow: 1, color: "#FFFFFF", marginLeft: "30px", fontSize: "23px" }}
         >
-          <img
-            src={logo}
-            alt="Logo"
-            style={{
-              height: "70px",
-              marginRight: "10px",
-              marginTop: "15px",
-              width: "140px",
-            }}
-          />
+          <RouterLink to="/" style={{ display: "inline-flex" }}>
+            <img
+              src={logo}
+              alt="Site logo"
+              style={{ height: "70px", marginRight: "10px", marginTop: "15px", width: "140px" }}
+            />
+          </RouterLink>
         </Typography>
+
         {isMobile ? (
           <>
-            {/* Mobile View */}
             <IconButton
               size="large"
               edge="start"
               color="inherit"
-              aria-label={showDrawer ? "close menu" : "menu"}
+              aria-label={showDrawer ? "close menu" : "open menu"}
               onClick={showDrawer ? handleCloseDrawer : toggleDrawer}
-              sx={{
-                bgcolor: showDrawer
-                  ? "linear-gradient(45deg, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 100%)"
-                  : "transparent",
-              }}
             >
-              {showDrawer ? (
-                <CloseIcon sx={{ color: "#FFFFFF" }} />
-              ) : (
-                <MenuIcon sx={{ color: "#FFFFFF" }} />
-              )}
+              {showDrawer ? <CloseIcon sx={{ color: "#FFFFFF" }} /> : <MenuIcon sx={{ color: "#FFFFFF" }} />}
             </IconButton>
             <Drawer
               anchor="right"
               open={showDrawer}
               onClose={toggleDrawer}
-              classes={{ paper: "drawer-paper" }}
-              PaperProps={{
-                sx: {
-                  backgroundColor: "rgba(0, 0, 0, 1)",
-                  color: "#FFFFFF",
-                },
-              }}
+              PaperProps={{ sx: { backgroundColor: "rgba(0, 0, 0, 1)", color: "#FFFFFF" } }}
             >
               <List>
                 <ListItem button onClick={handleCloseDrawer}>
                   <CloseIcon sx={{ color: "#FFFFFF" }} />
                   <ListItemText />
                 </ListItem>
-                <Link to="home" spy={true} smooth={true} duration={500}>
+                {onHomepage &&
+                  SCROLL_LINKS.map((link) => (
+                    <ScrollLink key={link.to} to={link.to} spy smooth duration={500} onClick={handleCloseDrawer}>
+                      <ListItem
+                        button
+                        sx={{ borderRadius: "8px", "&:hover": { backgroundColor: "#800080" } }}
+                      >
+                        <ListItemText primary={link.label} />
+                      </ListItem>
+                    </ScrollLink>
+                  ))}
+                <RouterLink to="/resources" style={{ textDecoration: "none", color: "inherit" }} onClick={handleCloseDrawer}>
                   <ListItem
                     button
-                    color="inherit"
                     sx={{
-                      marginLeft: "0px",
-                      backgroundColor: isHomeHovering
-                        ? "#800080"
-                        : "transparent",
-                      "&:hover": { backgroundColor: "#800080" },
                       borderRadius: "8px",
-                    }}
-                    onMouseEnter={() => setIsHomeHovering(true)}
-                    onMouseLeave={() => setIsHomeHovering(false)}
-                  >
-                    <ListItemText primary="Home" />
-                  </ListItem>
-                </Link>
-                <Link to="about" spy={true} smooth={true} duration={500}>
-                  <ListItem
-                    button
-                    color="inherit"
-                    sx={{
-                      marginLeft: "0px",
-                      backgroundColor: isAboutHovering
-                        ? "#800080"
-                        : "transparent",
+                      backgroundColor: isResourcesActive ? "#800080" : "transparent",
                       "&:hover": { backgroundColor: "#800080" },
-                      borderRadius: "8px",
                     }}
-                    onMouseEnter={() => setIsAboutHovering(true)}
-                    onMouseLeave={() => setIsAboutHovering(false)}
                   >
-                    <ListItemText primary="About" />
+                    <ListItemText primary="Resources" />
                   </ListItem>
-                </Link>
-                <Link to="skill" spy={true} smooth={true} duration={500}>
-                  <ListItem
-                    button
-                    color="inherit"
-                    sx={{
-                      marginLeft: "0px",
-                      backgroundColor: isSkillsHovering
-                        ? "#800080"
-                        : "transparent",
-                      "&:hover": { backgroundColor: "#800080" },
-                      borderRadius: "8px",
-                    }}
-                    onMouseEnter={() => setIsSkillsHovering(true)}
-                    onMouseLeave={() => setIsSkillsHovering(false)}
-                  >
-                    <ListItemText primary="Skills" />
-                  </ListItem>
-                </Link>
-                <Link to="projects" spy={true} smooth={true} duration={500}>
-                  <ListItem
-                    button
-                    color="inherit"
-                    sx={{
-                      marginLeft: "0px",
-                      backgroundColor: isProjectsHovering
-                        ? "#800080"
-                        : "transparent",
-                      "&:hover": { backgroundColor: "#800080" },
-                      borderRadius: "8px",
-                    }}
-                    onMouseEnter={() => setIsProjectsHovering(true)}
-                    onMouseLeave={() => setIsProjectsHovering(false)}
-                  >
-                    <ListItemText primary="Projects" />
-                  </ListItem>
-                </Link>
-                <Link to="contact" spy={true} smooth={true} duration={500}>
-                  <ListItem
-                    button
-                    color="inherit"
-                    sx={{
-                      marginLeft: "0px",
-                      backgroundColor: isContactHovering
-                        ? "#800080"
-                        : "transparent",
-                      "&:hover": { backgroundColor: "#800080" },
-                      borderRadius: "8px",
-                    }}
-                    onMouseEnter={() => setIsContactHovering(true)}
-                    onMouseLeave={() => setIsContactHovering(false)}
-                  >
-                    <ListItemText primary="Contact" />
-                  </ListItem>
-                </Link>
+                </RouterLink>
               </List>
             </Drawer>
           </>
         ) : (
-          // PC View
           <>
-            <Link to="home" spy={true} smooth={true} duration={500}>
-              <Button
-                color="inherit"
-                sx={{
-                  marginLeft: "20px",
-                  backgroundColor: isHomeHovering ? "#800080" : "transparent",
-                  "&:hover": { backgroundColor: "#800080" },
-                }}
-                onMouseEnter={() => setIsHomeHovering(true)}
-                onMouseLeave={() => setIsHomeHovering(false)}
-              >
-                Home
-              </Button>
-            </Link>
-            <Link to="about" spy={true} smooth={true} duration={500}>
-              <Button
-                color="inherit"
-                sx={{
-                  marginLeft: "20px",
-                  backgroundColor: isAboutHovering ? "#800080" : "transparent",
-                  "&:hover": { backgroundColor: "#800080" },
-                }}
-                onMouseEnter={() => setIsAboutHovering(true)}
-                onMouseLeave={() => setIsAboutHovering(false)}
-              >
-                About
-              </Button>
-            </Link>
-            <Link to="skill" spy={true} smooth={true} duration={500}>
-              <Button
-                color="inherit"
-                sx={{
-                  marginLeft: "20px",
-                  backgroundColor: isSkillsHovering
-                    ? "#800080"
-                    : "transparent",
-                  "&:hover": { backgroundColor: "#800080" },
-                }}
-                onMouseEnter={() => setIsSkillsHovering(true)}
-                onMouseLeave={() => setIsSkillsHovering(false)}
-              >
-                Skills
-              </Button>
-            </Link>
-            <Link to="projects" spy={true} smooth={true} duration={500}>
-              <Button
-                color="inherit"
-                sx={{
-                  marginLeft: "20px",
-                  backgroundColor: isProjectsHovering
-                    ? "#800080"
-                    : "transparent",
-                  "&:hover": { backgroundColor: "#800080" },
-                }}
-                onMouseEnter={() => setIsProjectsHovering(true)}
-                onMouseLeave={() => setIsProjectsHovering(false)}
-              >
-                Projects
-              </Button>
-            </Link>
-            <Link to="contact" spy={true} smooth={true} duration={500}>
-              <Button
-                color="inherit"
-                sx={{
-                  marginLeft: "20px",
-                  backgroundColor: isContactHovering
-                    ? "#800080"
-                    : "transparent",
-                  "&:hover": { backgroundColor: "#800080" },
-                }}
-                onMouseEnter={() => setIsContactHovering(true)}
-                onMouseLeave={() => setIsContactHovering(false)}
-              >
-                Contact
-              </Button>
-            </Link>
+            {onHomepage &&
+              SCROLL_LINKS.map((link) => (
+                <ScrollLink key={link.to} to={link.to} spy smooth duration={500}>
+                  <Button sx={navButtonSx}>{link.label}</Button>
+                </ScrollLink>
+              ))}
+            <Button
+              component={RouterLink}
+              to="/resources"
+              sx={{ ...navButtonSx, backgroundColor: isResourcesActive ? "#800080" : "transparent" }}
+            >
+              Resources
+            </Button>
           </>
         )}
       </Toolbar>

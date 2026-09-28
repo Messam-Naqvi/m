@@ -1,8 +1,10 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Box, Typography, Button, Snackbar, Alert } from "@mui/material";
+import { Box, Typography, Button, Snackbar, Alert, TextField, CircularProgress } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
+import MailOutlineIcon from "@mui/icons-material/MailOutline";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { motion } from "framer-motion";
+import { submitMessage } from "../firebase/firestore";
 
 /**
  * Contact Component
@@ -13,7 +15,42 @@ const Contact = () => {
   const contactRef = useRef(null);
   const [isVisible, setIsVisible] = useState(false);
   const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "info" });
-  
+  const [form, setForm] = useState({ name: "", email: "", message: "" });
+  const [formErrors, setFormErrors] = useState({});
+  const [submitting, setSubmitting] = useState(false);
+
+  const validate = () => {
+    const errors = {};
+    if (form.name.trim().length < 3 || form.name.trim().length > 40 || !/^[A-Za-z\s]+$/.test(form.name.trim())) {
+      errors.name = "Name must be 3-40 letters/spaces.";
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.trim())) {
+      errors.email = "Enter a valid email address.";
+    }
+    if (form.message.trim().length < 3) {
+      errors.message = "Message must be at least 3 characters.";
+    }
+    return errors;
+  };
+
+  const handleFormSubmit = async (e) => {
+    e.preventDefault();
+    const errors = validate();
+    setFormErrors(errors);
+    if (Object.keys(errors).length > 0) return;
+
+    setSubmitting(true);
+    try {
+      await submitMessage(form);
+      setForm({ name: "", email: "", message: "" });
+      setSnackbar({ open: true, message: "Message sent — thanks for reaching out!", severity: "success" });
+    } catch (err) {
+      setSnackbar({ open: true, message: "Couldn't send your message. Please try again.", severity: "error" });
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
   // Responsive Breakpoints
   const isTablet = useMediaQuery("(max-width:900px)");
   const isMobile = useMediaQuery("(max-width:600px)");
@@ -130,7 +167,7 @@ const Contact = () => {
 
             <Button
               variant="contained"
-              endIcon={<SendIcon />}
+              endIcon={<MailOutlineIcon />}
               onClick={handleContact}
               fullWidth={isMobile}
               sx={{
@@ -151,12 +188,80 @@ const Contact = () => {
                 transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
               }}
             >
-              Send Message
+              Open Email Client
+            </Button>
+          </Box>
+
+          <Box
+            component="form"
+            onSubmit={handleFormSubmit}
+            sx={{
+              backgroundColor: "rgba(255, 255, 255, 0.04)",
+              padding: { xs: 3, sm: 4, md: 5 },
+              borderRadius: { xs: 6, md: 8 },
+              border: "1px solid rgba(255, 255, 255, 0.08)",
+              backdropFilter: "blur(12px)",
+              mb: 4,
+              display: "flex",
+              flexDirection: "column",
+              gap: 2,
+            }}
+          >
+            <Typography sx={{ color: "#e0e0e0", fontWeight: 600 }}>
+              Or send a message directly
+            </Typography>
+            <TextField
+              label="Name"
+              value={form.name}
+              onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
+              error={Boolean(formErrors.name)}
+              helperText={formErrors.name}
+              fullWidth
+              sx={{ input: { color: "white" }, label: { color: "rgba(255,255,255,0.6)" } }}
+            />
+            <TextField
+              label="Email"
+              type="email"
+              value={form.email}
+              onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))}
+              error={Boolean(formErrors.email)}
+              helperText={formErrors.email}
+              fullWidth
+              sx={{ input: { color: "white" }, label: { color: "rgba(255,255,255,0.6)" } }}
+            />
+            <TextField
+              label="Message"
+              value={form.message}
+              onChange={(e) => setForm((f) => ({ ...f, message: e.target.value }))}
+              error={Boolean(formErrors.message)}
+              helperText={formErrors.message}
+              multiline
+              minRows={3}
+              fullWidth
+              sx={{ textarea: { color: "white" }, label: { color: "rgba(255,255,255,0.6)" } }}
+            />
+            <Button
+              type="submit"
+              variant="outlined"
+              disabled={submitting}
+              endIcon={submitting ? <CircularProgress size={16} color="inherit" /> : <SendIcon />}
+              sx={{
+                borderColor: "purple",
+                color: "white",
+                alignSelf: isMobile ? "stretch" : "flex-start",
+                px: 4,
+                py: 1.2,
+                borderRadius: "50px",
+                textTransform: "none",
+                "&:hover": { backgroundColor: "rgba(128,0,128,0.15)", borderColor: "purple" },
+              }}
+            >
+              {submitting ? "Sending…" : "Send Message"}
             </Button>
           </Box>
 
           <Typography sx={{ color: "rgba(255,255,255,0.4)", fontSize: "0.75rem", letterSpacing: 2, fontWeight: 600 }}>
-            AVAILABLE FOR FREELANCE & COLLABORATIONS
+            AVAILABLE FOR RESEARCH & COLLABORATIONS
           </Typography>
         </Box>
       </motion.div>

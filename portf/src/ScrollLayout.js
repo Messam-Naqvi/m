@@ -6,6 +6,7 @@ import Navbar from "./Components/Navbar";
 import Home from "./Components/Home";
 import About from "./Components/About";
 import Skill from "./Components/Skill";
+import ResourcesPreview from "./Components/Resources/ResourcesPreview";
 import Projects from "./Components/Projects";
 import ResearchSection from "./Components/ResearchSection";
 import Contact from "./Components/Contact";
@@ -47,6 +48,10 @@ const ScrollLayout = () => {
 
       <Element name="skill">
         <Skill />
+      </Element>
+
+      <Element name="resources">
+        <ResourcesPreview />
       </Element>
 
       <Element name="projects">

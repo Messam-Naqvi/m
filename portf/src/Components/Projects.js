@@ -70,7 +70,7 @@ const Projects = () => {
       image: gy,
       githubLink: "https://gymi-beta.vercel.app/home",
       liveLink: "https://gymi-beta.vercel.app/home",
-      documentation: "./Documentation/Gymi.pdf",
+      documentation: null,
     },
     {
       id: 3,
@@ -219,26 +219,28 @@ const Projects = () => {
                     {project.detailDescription}
                   </Typography>
                   <br />
-                  <Button
-                    variant="outlined"
-                    style={{
-                      borderColor: "purple",
-                      color: "white",
-                      height: "40px",
-                    }}
-                    sx={{
-                      "&:hover": {
-                        backgroundColor: "purple",
+                  {project.documentation && (
+                    <Button
+                      variant="outlined"
+                      style={{
+                        borderColor: "purple",
                         color: "white",
-                      },
-                    }}
-                    onClick={() => window.open(project.documentation, '_blank')}
-                  >
-                    View Documentation
-                    <IconButton style={{ color: "white" }}>
-                      <ArrowForwardIcon />
-                    </IconButton>
-                  </Button>
+                        height: "40px",
+                      }}
+                      sx={{
+                        "&:hover": {
+                          backgroundColor: "purple",
+                          color: "white",
+                        },
+                      }}
+                      onClick={() => window.open(project.documentation, '_blank')}
+                    >
+                      View Documentation
+                      <IconButton style={{ color: "white" }}>
+                        <ArrowForwardIcon />
+                      </IconButton>
+                    </Button>
+                  )}
                   <br />
                   <br />
                   <br />

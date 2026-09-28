@@ -3,6 +3,7 @@ import { Box, Container, Grid, Typography, IconButton } from '@mui/material';
 import { LinkedIn, GitHub } from '@mui/icons-material';
 import { SiKaggle } from 'react-icons/si';
 import { Link as ScrollLink } from 'react-scroll';
+import { Link as RouterLink } from 'react-router-dom';
 
 const Footer = () => {
   return (
@@ -11,13 +12,14 @@ const Footer = () => {
         <Grid container spacing={4}>
           <Grid item xs={12} sm={4}>
             <Box sx={{ textAlign: { xs: 'center', sm: 'left' } }}>
-              <Typography variant="h5" gutterBottom sx={{ fontWeight: 'bold', color: '#ffcc00' }}>
+              <Typography variant="h5" gutterBottom sx={{ fontWeight: 'bold', color: '#c9a6ff' }}>
                 About Me
               </Typography>
               <Typography variant="body2" sx={{ mb: 2 }}>
-                I am a passionate web developer with expertise in the MERN stack. I love creating web applications that provide great user experiences.
+                AI-focused software engineer pursuing an MS in AI at LUMS. I build full-stack applications
+                and share what I learn along the way.
               </Typography>
-              <Typography variant="h6" gutterBottom sx={{ color: '#ffcc00' }}>
+              <Typography variant="h6" gutterBottom sx={{ color: '#c9a6ff' }}>
                 Contact Me
               </Typography>
               <Typography variant="body2">
@@ -27,7 +29,7 @@ const Footer = () => {
           </Grid>
           <Grid item xs={12} sm={4}>
             <Box sx={{ textAlign: { xs: 'center', sm: 'left' } }}>
-              <Typography variant="h5" gutterBottom sx={{ fontWeight: 'bold', color: '#ffcc00' }}>
+              <Typography variant="h5" gutterBottom sx={{ fontWeight: 'bold', color: '#c9a6ff' }}>
                 Quick Links
               </Typography>
               <Box>
@@ -40,7 +42,10 @@ const Footer = () => {
                 <ScrollLink to="projects" spy={true} smooth={true} duration={500} style={{ color: 'inherit', textDecoration: 'none', cursor: 'pointer' }}>Projects</ScrollLink>
               </Box>
               <Box>
-                <ScrollLink to="Fyp" spy={true} smooth={true} duration={500} style={{ color: 'inherit', textDecoration: 'none', cursor: 'pointer' }}>Fyp</ScrollLink>
+                <ScrollLink to="fyp" spy={true} smooth={true} duration={500} style={{ color: 'inherit', textDecoration: 'none', cursor: 'pointer' }}>Research</ScrollLink>
+              </Box>
+              <Box>
+                <RouterLink to="/resources" style={{ color: 'inherit', textDecoration: 'none' }}>Resources</RouterLink>
               </Box>
               <Box>
                 <ScrollLink to="contact" spy={true} smooth={true} duration={500} style={{ color: 'inherit', textDecoration: 'none', cursor: 'pointer' }}>Contact</ScrollLink>
@@ -49,7 +54,7 @@ const Footer = () => {
           </Grid>
           <Grid item xs={12} sm={4}>
             <Box sx={{ textAlign: { xs: 'center', sm: 'left' } }}>
-              <Typography variant="h5" gutterBottom sx={{ fontWeight: 'bold', color: '#ffcc00' }}>
+              <Typography variant="h5" gutterBottom sx={{ fontWeight: 'bold', color: '#c9a6ff' }}>
                 Let's Connect
               </Typography>
               <Box sx={{ display: 'flex', gap: 2, mt: 2, justifyContent: { xs: 'center', sm: 'flex-start' } }}>

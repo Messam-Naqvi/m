@@ -6,22 +6,25 @@ import CloseIcon from "@mui/icons-material/Close";
 import CodeIcon from "@mui/icons-material/Code";
 import TerminalIcon from "@mui/icons-material/Terminal";
 import HubIcon from "@mui/icons-material/Hub";
+import AutoAwesomeIcon from "@mui/icons-material/AutoAwesome";
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 
 // Configuration Logic
 const CONFIG = {
   name: "Messam Naqvi",
   tagline: "I build things for web & AI.",
-  bio: "Software Engineer specializing in Neural Architectures and Scalable MERN Systems. Bridging the gap between robust engineering and intelligent automation.",
+  bio: "AI-focused Software Engineer pursuing an MS in Artificial Intelligence at LUMS. Bridging the gap between robust engineering and intelligent, LLM-powered systems.",
   email: "messamnaqvi@example.com",
   stats: [
     { label: "Experience", value: "2+ Years" },
     { label: "Projects", value: "5+ Live" },
-    { label: "Focus", value: "Deep Learning" }
+    { label: "Focus", value: "AI & LLMs" }
   ],
   services: [
-    { title: "MERN Architecture", desc: "Enterprise-grade full-stack systems with real-time distributed logic.", icon: <HubIcon fontSize="small" /> },
-    { title: "Neural Research", desc: "Specialized in Vision Transformers and Large Language Model fine-tuning.", icon: <TerminalIcon fontSize="small" /> },
+    { title: "AI & LLM Engineering", desc: "Generative AI, RAG pipelines, and agentic systems built on modern LLM tooling.", icon: <AutoAwesomeIcon fontSize="small" /> },
+    { title: "Full-Stack Architecture", desc: "Enterprise-grade full-stack systems with real-time distributed logic.", icon: <HubIcon fontSize="small" /> },
+    { title: "Applied ML Research", desc: "Deep learning and NLP research, from fine-tuning to evaluation.", icon: <TerminalIcon fontSize="small" /> },
     { title: "Technical Mentorship", desc: "Consulting for students and startups on scalable tech-stacks.", icon: <CodeIcon fontSize="small" /> }
   ]
 };
@@ -59,6 +62,7 @@ const serviceCardStyle = {
 };
 
 const Home = () => {
+  const navigate = useNavigate();
   const [typedText, setTypedText] = useState("");
   const [openModal, setOpenModal] = useState(false);
 
@@ -264,6 +268,21 @@ const Home = () => {
                   }}
                 >
                   Explore Services
+                </Button>
+
+                <Button
+                  variant="text"
+                  onClick={() => navigate("/resources")}
+                  sx={{
+                    color: "#c9a6ff",
+                    px: { xs: 3, md: 4 },
+                    py: 1.8,
+                    fontWeight: 800,
+                    textTransform: "none",
+                    "&:hover": { color: "white", bgcolor: "rgba(128,0,128,0.08)" },
+                  }}
+                >
+                  Browse Resources
                 </Button>
               </Stack>
             </motion.div>
