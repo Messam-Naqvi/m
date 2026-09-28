@@ -4,6 +4,12 @@
     <!-- Charset definition -->
     <meta charset="utf-8" />
 
+    <!-- Warm up connections to the domains used on first load (Firestore for
+         the visit counter, GA4) so those requests don't pay full DNS+TLS
+         setup cost when they fire — helps most on slow/high-latency networks. -->
+    <link rel="preconnect" href="https://firestore.googleapis.com" />
+    <link rel="preconnect" href="https://www.googletagmanager.com" />
+
     <!-- Disable server fingerprinting by hiding software details (custom headers) -->
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 

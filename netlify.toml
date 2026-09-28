@@ -17,3 +17,12 @@
     # X-Frame-Options only takes effect as a real HTTP header (a <meta> tag is
     # silently ignored by browsers), so it lives here rather than index.html.
     X-Frame-Options = "DENY"
+
+[[headers]]
+  # CRA fingerprints every file under /static/ with a content hash, so it's
+  # always safe to cache these forever — a new build gets new filenames.
+  # This matters most on slow connections: repeat visits skip the download
+  # entirely instead of re-fetching JS/CSS/images every time.
+  for = "/static/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"

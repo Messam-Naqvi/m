@@ -173,6 +173,7 @@ const Projects = () => {
                 height="150"
                 image={project.image}
                 alt={project.title}
+                loading="lazy"
                 style={{
                   objectFit: "cover",
                   width: "96%",

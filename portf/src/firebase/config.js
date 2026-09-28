@@ -1,6 +1,5 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
-import { getAuth } from "firebase/auth";
 import { isSupported, getAnalytics } from "firebase/analytics";
 
 const firebaseConfig = {
@@ -18,7 +17,6 @@ export const ADMIN_EMAIL = process.env.REACT_APP_ADMIN_EMAIL || "";
 const app = initializeApp(firebaseConfig);
 
 export const db = getFirestore(app);
-export const auth = getAuth(app);
 
 // Google Analytics (GA4) — separate from, and complementary to, the
 // lightweight Firestore visit counters in ./analytics.js. Guarded because

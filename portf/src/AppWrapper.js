@@ -1,26 +1,37 @@
-import { useEffect } from "react";
+import { useEffect, lazy, Suspense } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { ThemeProvider, CssBaseline } from "@mui/material";
+import { ThemeProvider, CssBaseline, Box, CircularProgress } from "@mui/material";
 import theme from "./theme";
-import { AuthProvider } from "./context/AuthContext";
 import { recordVisit } from "./firebase/analytics";
 import ScrollLayout from "./ScrollLayout";
-import AcademicJourney from "./Components/Academic_Journey";
-import ResourcesHub from "./Components/Resources/ResourcesHub";
-import AdminLogin from "./Components/Admin/AdminLogin";
-import AdminDashboard from "./Components/Admin/AdminDashboard";
-import ProtectedRoute from "./Components/Admin/ProtectedRoute";
+
+// Everything outside the homepage is code-split: visitors browsing the
+// portfolio never download the academic-journey timeline, the resources
+// hub, or (most importantly) the admin area's Firebase Auth SDK.
+const AcademicJourney = lazy(() => import("./Components/Academic_Journey"));
+const ResourcesHub = lazy(() => import("./Components/Resources/ResourcesHub"));
+const AdminArea = lazy(() => import("./Components/Admin/AdminArea"));
+
+const RouteFallback = () => (
+  <Box sx={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "#000" }}>
+    <CircularProgress sx={{ color: "purple" }} />
+  </Box>
+);
 
 export default function AppWrapper() {
   useEffect(() => {
-    recordVisit();
+    // Deferred so it never competes with initial render/paint on slow
+    // connections — visit tracking isn't time-critical.
+    const idle = window.requestIdleCallback || ((cb) => setTimeout(cb, 1));
+    const handle = idle(() => recordVisit());
+    return () => (window.cancelIdleCallback ? window.cancelIdleCallback(handle) : clearTimeout(handle));
   }, []);
 
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <AuthProvider>
-        <Router>
+      <Router>
+        <Suspense fallback={<RouteFallback />}>
           <Routes>
             {/* Scroll-based portfolio */}
             <Route path="/*" element={<ScrollLayout />} />
@@ -31,18 +42,10 @@ export default function AppWrapper() {
             <Route path="/resources/:categorySlug" element={<ResourcesHub />} />
 
             {/* Owner-only admin area — not linked from the public nav */}
-            <Route path="/admin/login" element={<AdminLogin />} />
-            <Route
-              path="/admin"
-              element={
-                <ProtectedRoute>
-                  <AdminDashboard />
-                </ProtectedRoute>
-              }
-            />
+            <Route path="/admin/*" element={<AdminArea />} />
           </Routes>
-        </Router>
-      </AuthProvider>
+        </Suspense>
+      </Router>
     </ThemeProvider>
   );
 }

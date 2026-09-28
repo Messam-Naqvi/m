@@ -1,8 +1,8 @@
 import {
   doc,
   collection,
-  runTransaction,
   setDoc,
+  increment,
   getDocs,
   serverTimestamp,
 } from "firebase/firestore";
@@ -44,14 +44,9 @@ export async function recordVisit() {
   const dayRef = doc(db, "analytics", todayKey());
 
   try {
-    await runTransaction(db, async (tx) => {
-      const daySnap = await tx.get(dayRef);
-      if (!daySnap.exists()) {
-        tx.set(dayRef, { totalVisits: 1 });
-      } else {
-        tx.update(dayRef, { totalVisits: daySnap.data().totalVisits + 1 });
-      }
-    });
+    // Atomic increment via merge — no prior read needed, which matters
+    // because visitors only have create/update rights on this doc, not read.
+    await setDoc(dayRef, { totalVisits: increment(1) }, { merge: true });
 
     const visitorRef = doc(db, "analytics", todayKey(), "visitors", visitorId);
     await setDoc(visitorRef, { firstSeen: serverTimestamp() }, { merge: true });

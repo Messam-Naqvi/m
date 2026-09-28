@@ -178,6 +178,7 @@ const Contact = () => {
           component="img"
           src={getIllustrationSource()}
           alt="Contact Illustration"
+          loading="lazy"
           sx={{
             width: "100%",
             maxWidth: { xs: "320px", sm: "420px", md: "520px" },
