@@ -10,3 +10,10 @@
   from = "/*"
   to = "/index.html"
   status = 200
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    # X-Frame-Options only takes effect as a real HTTP header (a <meta> tag is
+    # silently ignored by browsers), so it lives here rather than index.html.
+    X-Frame-Options = "DENY"
