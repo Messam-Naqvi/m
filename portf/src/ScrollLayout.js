@@ -5,7 +5,6 @@ import { Element, scroller } from "react-scroll";
 import Navbar from "./Components/Navbar";
 import Home from "./Components/Home";
 import About from "./Components/About";
-import Skill from "./Components/Skill";
 import ResourcesPreview from "./Components/Resources/ResourcesPreview";
 import Projects from "./Components/Projects";
 import ResearchSection from "./Components/ResearchSection";
@@ -18,7 +17,6 @@ const ScrollLayout = () => {
   useEffect(() => {
     const pathToSection = {
       "/about": "about",
-      "/skills": "skill",
       "/projects": "projects",
       "/researches": "fyp",
       "/contact": "contact",
@@ -44,10 +42,6 @@ const ScrollLayout = () => {
 
       <Element name="about">
         <About />
-      </Element>
-
-      <Element name="skill">
-        <Skill />
       </Element>
 
       <Element name="resources">

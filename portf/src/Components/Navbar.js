@@ -22,7 +22,6 @@ import logo from "../logo.png";
 const SCROLL_LINKS = [
   { label: "Home", to: "home" },
   { label: "About", to: "about" },
-  { label: "Skills", to: "skill" },
   { label: "Projects", to: "projects" },
   { label: "Research", to: "fyp" },
   { label: "Contact", to: "contact" },
