@@ -22,20 +22,6 @@ service cloud.firestore {
       allow create, update, delete: if isOwner();
     }
 
-    // ---------- Contact messages ----------
-    match /messages/{messageId} {
-      allow create: if request.resource.data.keys().hasOnly(['name', 'email', 'message', 'read', 'createdAt'])
-        && request.resource.data.name is string
-        && request.resource.data.name.size() >= 3
-        && request.resource.data.name.size() <= 40
-        && request.resource.data.email is string
-        && request.resource.data.email.matches('^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$')
-        && request.resource.data.message is string
-        && request.resource.data.message.size() >= 3
-        && request.resource.data.read == false;
-      allow read, update, delete: if isOwner();
-    }
-
     // ---------- Anonymous analytics (no Cloud Functions -> stays on the free plan) ----------
     match /analytics/{day} {
       allow read: if isOwner();

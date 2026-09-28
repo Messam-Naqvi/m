@@ -82,35 +82,6 @@ export function deleteResource(id) {
   return deleteDoc(doc(db, "resources", id));
 }
 
-// ---------- Messages (contact form) ----------
-
-export function submitMessage({ name, email, message }) {
-  return addDoc(collection(db, "messages"), {
-    name,
-    email,
-    message,
-    read: false,
-    createdAt: serverTimestamp(),
-  });
-}
-
-export function subscribeToMessages(callback, onError) {
-  const q = query(collection(db, "messages"), orderBy("createdAt", "desc"));
-  return onSnapshot(
-    q,
-    (snap) => callback(snap.docs.map((d) => ({ id: d.id, ...d.data() }))),
-    onError
-  );
-}
-
-export function markMessageRead(id, read = true) {
-  return updateDoc(doc(db, "messages", id), { read });
-}
-
-export function deleteMessage(id) {
-  return deleteDoc(doc(db, "messages", id));
-}
-
 // ---------- Aggregation helper (used by analytics) ----------
 
 export async function countCollection(collectionRef) {

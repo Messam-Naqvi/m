@@ -30,9 +30,6 @@ import {
   updateResource,
   addCategory,
   deleteCategory,
-  subscribeToMessages,
-  markMessageRead,
-  deleteMessage,
 } from "../../firebase/firestore";
 import ResourceForm from "./ResourceForm";
 import AnalyticsPanel from "./AnalyticsPanel";
@@ -49,7 +46,6 @@ const AdminDashboard = () => {
   const [editingResource, setEditingResource] = useState(null);
   const [confirmDelete, setConfirmDelete] = useState(null);
 
-  const [messages, setMessages] = useState([]);
   const [newCategoryName, setNewCategoryName] = useState("");
 
   React.useEffect(() => {
@@ -57,11 +53,6 @@ const AdminDashboard = () => {
       setResources(data);
       setResourcesLoading(false);
     });
-    return unsub;
-  }, []);
-
-  React.useEffect(() => {
-    const unsub = subscribeToMessages(setMessages);
     return unsub;
   }, []);
 
@@ -112,7 +103,6 @@ const AdminDashboard = () => {
       >
         <Tab label="Resources" />
         <Tab label="Categories" />
-        <Tab label={`Messages${messages.filter((m) => !m.read).length ? ` (${messages.filter((m) => !m.read).length})` : ""}`} />
         <Tab label="Analytics" />
       </Tabs>
 
@@ -219,39 +209,7 @@ const AdminDashboard = () => {
         </Box>
       )}
 
-      {tab === 2 && (
-        <Stack spacing={1.5}>
-          {messages.length === 0 && <Typography sx={{ opacity: 0.6 }}>No messages yet.</Typography>}
-          {messages.map((m) => (
-            <Box
-              key={m.id}
-              sx={{
-                p: 2,
-                borderRadius: 2,
-                background: m.read ? "rgba(255,255,255,0.03)" : "rgba(138,43,226,0.1)",
-                border: "1px solid rgba(255,255,255,0.08)",
-              }}
-            >
-              <Stack direction="row" justifyContent="space-between" alignItems="center" flexWrap="wrap">
-                <Typography fontWeight={700}>
-                  {m.name} · <span style={{ opacity: 0.6, fontWeight: 400 }}>{m.email}</span>
-                </Typography>
-                <Stack direction="row" spacing={1}>
-                  <Button size="small" onClick={() => markMessageRead(m.id, !m.read)} sx={{ color: "white" }}>
-                    {m.read ? "Mark unread" : "Mark read"}
-                  </Button>
-                  <IconButton size="small" sx={{ color: "#ff6b6b" }} onClick={() => deleteMessage(m.id)}>
-                    <DeleteIcon fontSize="small" />
-                  </IconButton>
-                </Stack>
-              </Stack>
-              <Typography sx={{ mt: 1, color: "rgba(255,255,255,0.75)" }}>{m.message}</Typography>
-            </Box>
-          ))}
-        </Stack>
-      )}
-
-      {tab === 3 && <AnalyticsPanel />}
+      {tab === 2 && <AnalyticsPanel />}
 
       <ResourceForm open={formOpen} onClose={() => setFormOpen(false)} categories={categories} editingResource={editingResource} />
 

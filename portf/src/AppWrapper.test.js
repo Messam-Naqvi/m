@@ -35,18 +35,11 @@ jest.mock("./firebase/firestore", () => ({
     cb([]);
     return () => {};
   },
-  subscribeToMessages: (cb) => {
-    cb([]);
-    return () => {};
-  },
-  submitMessage: jest.fn(),
   addCategory: jest.fn(),
   deleteCategory: jest.fn(),
   addResource: jest.fn(),
   updateResource: jest.fn(),
   deleteResource: jest.fn(),
-  markMessageRead: jest.fn(),
-  deleteMessage: jest.fn(),
 }));
 
 test("renders the navbar", () => {
