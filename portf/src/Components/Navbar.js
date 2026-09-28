@@ -47,7 +47,7 @@ const Navbar = () => {
   const onHomepage = !isResourcesActive;
 
   return (
-    <AppBar position="sticky" sx={{ backgroundColor: "transparent", boxShadow: "none" }}>
+    <AppBar position="sticky" color="transparent" elevation={0} sx={{ backgroundColor: "transparent", backgroundImage: "none", boxShadow: "none" }}>
       <Toolbar>
         <Typography
           variant="h6"
