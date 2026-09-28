@@ -14,9 +14,11 @@ import {
   FormControlLabel,
   Alert,
   IconButton,
+  LinearProgress,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { addResource, updateResource } from "../../firebase/firestore";
+import { uploadPdf } from "../../cloudinary/upload";
 
 const EMPTY = {
   title: "",
@@ -31,17 +33,20 @@ const EMPTY = {
   published: false,
 };
 
-// File uploads intentionally aren't supported — Firebase Storage requires the
-// paid Blaze plan, which conflicts with keeping this site entirely free.
-// For PDFs/documents, upload to Google Drive and paste the share link here.
+// PDF uploads go through Cloudinary's free tier (see ../../cloudinary/upload.js)
+// since Firebase Storage now requires the paid Blaze plan.
 const ResourceForm = ({ open, onClose, categories, editingResource }) => {
   const [form, setForm] = useState(EMPTY);
   const [tagInput, setTagInput] = useState("");
+  const [file, setFile] = useState(null);
+  const [uploadProgress, setUploadProgress] = useState(null);
   const [error, setError] = useState(null);
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
     setForm(editingResource ? { ...EMPTY, ...editingResource } : EMPTY);
+    setFile(null);
+    setUploadProgress(null);
     setError(null);
   }, [editingResource, open]);
 
@@ -74,19 +79,31 @@ const ResourceForm = ({ open, onClose, categories, editingResource }) => {
       setError("Please provide a URL for this link.");
       return;
     }
+    if (form.type === "file" && !file && !form.url) {
+      setError("Please choose a PDF to upload.");
+      return;
+    }
 
     setSaving(true);
     try {
+      let payload = form;
+
+      if (form.type === "file" && file) {
+        const uploaded = await uploadPdf(file, setUploadProgress);
+        payload = { ...form, ...uploaded };
+      }
+
       if (editingResource) {
-        await updateResource(editingResource.id, form);
+        await updateResource(editingResource.id, payload);
       } else {
-        await addResource(form);
+        await addResource(payload);
       }
       onClose();
     } catch (err) {
-      setError("Could not save this resource. Please try again.");
+      setError(err.message || "Could not save this resource. Please try again.");
     } finally {
       setSaving(false);
+      setUploadProgress(null);
     }
   };
 
@@ -190,13 +207,9 @@ const ResourceForm = ({ open, onClose, categories, editingResource }) => {
             sx={{ mt: 1, "& .MuiToggleButton-root": { color: "white", borderColor: "rgba(255,255,255,0.2)" } }}
           >
             <ToggleButton value="link">Link</ToggleButton>
+            <ToggleButton value="file">PDF</ToggleButton>
             <ToggleButton value="note">Note</ToggleButton>
           </ToggleButtonGroup>
-          {form.type === "link" && (
-            <Typography variant="caption" sx={{ display: "block", mt: 1, color: "rgba(255,255,255,0.4)" }}>
-              For PDFs/documents: upload to Google Drive, share it, and paste the link here.
-            </Typography>
-          )}
         </Box>
 
         {form.type === "link" && (
@@ -208,6 +221,16 @@ const ResourceForm = ({ open, onClose, categories, editingResource }) => {
             fullWidth
             sx={{ input: { color: "white" }, label: { color: "rgba(255,255,255,0.6)" } }}
           />
+        )}
+
+        {form.type === "file" && (
+          <Box>
+            <Button component="label" variant="outlined" sx={{ borderColor: "rgba(255,255,255,0.3)", color: "white" }}>
+              {file ? file.name : form.fileName ? `Replace "${form.fileName}"` : "Choose PDF"}
+              <input type="file" accept="application/pdf" hidden onChange={(e) => setFile(e.target.files?.[0] || null)} />
+            </Button>
+            {uploadProgress !== null && <LinearProgress variant="determinate" value={uploadProgress} sx={{ mt: 1 }} />}
+          </Box>
         )}
 
         {form.type === "note" && (

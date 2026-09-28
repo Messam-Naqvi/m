@@ -2,6 +2,7 @@ import React from "react";
 import { Dialog, DialogTitle, DialogContent, DialogActions, Typography, Button, Chip, Stack, IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import LaunchIcon from "@mui/icons-material/Launch";
+import DownloadIcon from "@mui/icons-material/Download";
 
 const ResourceDetailModal = ({ resource, onClose }) => {
   if (!resource) return null;
@@ -31,17 +32,17 @@ const ResourceDetailModal = ({ resource, onClose }) => {
           ))}
         </Stack>
       </DialogContent>
-      {resource.type === "link" && resource.url && (
+      {(resource.type === "link" || resource.type === "file") && resource.url && (
         <DialogActions sx={{ p: 2 }}>
           <Button
             variant="contained"
-            endIcon={<LaunchIcon />}
+            endIcon={resource.type === "file" ? <DownloadIcon /> : <LaunchIcon />}
             href={resource.url}
             target="_blank"
             rel="noopener noreferrer"
             sx={{ backgroundColor: "purple", "&:hover": { backgroundColor: "darkviolet" } }}
           >
-            Open Link
+            {resource.type === "file" ? "Download PDF" : "Open Link"}
           </Button>
         </DialogActions>
       )}

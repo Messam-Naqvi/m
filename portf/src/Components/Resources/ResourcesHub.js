@@ -16,6 +16,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import FolderIcon from "@mui/icons-material/Folder";
 import LinkIcon from "@mui/icons-material/Link";
 import NotesIcon from "@mui/icons-material/Notes";
+import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import InboxIcon from "@mui/icons-material/Inbox";
 import Navbar from "../Navbar";
@@ -25,6 +26,7 @@ import { useCategories, useResources } from "../../hooks/useResources";
 
 const TYPE_ICON = {
   link: <LinkIcon fontSize="small" />,
+  file: <PictureAsPdfIcon fontSize="small" />,
   note: <NotesIcon fontSize="small" />,
 };
 
@@ -74,7 +76,7 @@ const ResourcesHub = () => {
   }, [resources, search, activeTag]);
 
   const openResource = (resource) => {
-    if (resource.type === "link" && resource.url) {
+    if ((resource.type === "link" || resource.type === "file") && resource.url) {
       window.open(resource.url, "_blank", "noopener,noreferrer");
     } else {
       setSelected(resource);
